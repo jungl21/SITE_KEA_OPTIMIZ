@@ -1158,26 +1158,38 @@ text-align: center;
 /* Специальное правило для кнопки "О нас", чтобы буква "О" была над "НАС" */
 .nav-button:last-child {
     display: flex;
-    flex-direction: column; /* Превращаем текст в колонку */
+    flex-direction: column;
     align-items: center;
-    line-height: 1.1; /* Уменьшаем межстрочный интервал */
+    justify-content: center;
+    line-height: 1.2;
+    padding: 8px 12px;
+    min-width: 60px;
 }
 
-/* Разбиваем текст "О нас" на две строки */
+/* Скрываем оригинальный текст и показываем буквы по отдельности */
+.nav-button:last-child .nav-text {
+    display: none;
+}
+
 .nav-button:last-child::before {
     content: "О";
     display: block;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: var(--gold-light);
+    line-height: 1.2;
 }
-.nav-button:last-child {
-    font-size: 0; /* Скрываем оригинальный текст */
-}
+
 .nav-button:last-child::after {
     content: "НАС";
     display: block;
-    font-size: 10px; /* Возвращаем размер шрифта */
+    font-size: 11px;
+    font-weight: bold;
     letter-spacing: 0.5px;
+    color: var(--gold-light);
+    line-height: 1.2;
 }
-
 .hero,
 .about,
 .request-inner {
