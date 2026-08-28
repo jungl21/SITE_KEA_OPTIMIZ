@@ -1757,7 +1757,7 @@ style="color: var(--gold); text-decoration: none;">
 
 </a>
 
-(ФИО, телефон, email) в целях обработки заявки и обратной связи.
+(ФИО, телефон, электронную почту) в целях обработки заявки и обратной связи.
 
 </span>
 
@@ -1808,7 +1808,7 @@ font-weight:600; letter-spacing:1px;">РЕКВИЗИТЫ</p>
 style="color:var(--gold-light); text-decoration:none;">+7 812 920 01
 94</a></p>
 
-<p style="margin:4px 0;">Email: <a href="mailto:info@keamebel.ru"
+<p style="margin:4px 0;">Электронная почта: <a href="mailto:info@keamebel.ru"
 style="color:var(--gold-light);
 text-decoration:none;">info@keamebel.ru</a></p>
 
@@ -1894,37 +1894,29 @@ this.reset();
 
 <!-- === КУКИ-БАННЕР (согласие на использование файлов cookie) === -->
 
-<div id="cookie-banner" style="display: none; position: fixed;
-bottom: 0; left: 0; width: 100%; background: #111111; color: #ccc;
-padding: 16px 8%; border-top: 3px solid var(--gold); font-family:
-Arial, sans-serif; font-size: 13.2px; line-height: 1.5; z-index:
-99999999; box-shadow: 0 -4px 20px rgba(0,0,0,0.6);">
-
-<div style="max-width:1200px; margin:0 auto; display: flex;
-align-items: center; gap: 20px; flex-wrap: wrap;">
-
-<div style="flex: 1; min-width: 300px;">
-
-<p style="margin: 0 0 8px 0; font-size: 15px; color: var(--gold);
-font-weight: 600;">
-
- Мы используем файлы cookie
+<!-- === КУКИ-БАННЕР === -->
+<div id="cookie-banner" style="display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #111111; color: #ccc; padding: 16px 8%; border-top: 3px solid var(--gold); font-family: Arial, sans-serif; font-size: 13.2px; line-height: 1.5; z-index: 99999999; box-shadow: 0 -4px 20px rgba(0,0,0,0.6);">
+    <div style="max-width:1200px; margin:0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <p style="margin: 0 0 8px 0; font-size: 15px; color: var(--gold); font-weight: 600;">
+                Мы используем файлы cookie
             </p>
             <p style="margin: 0;">
                 Чтобы сайт работал правильно, анализировать трафик и улучшать качество. 
-                <a href="politika-cookie.pdf" 
-                   target="_blank" 
-                   style="color: var(--gold-light); text-decoration: none;">
+                <a href="politika-cookie.pdf" target="_blank" style="color: var(--gold-light); text-decoration: none;">
                     Подробнее в политике конфиденциальности
                 </a>
             </p>
         </div>
 
         <div style="flex: 1; min-width: 280px; display: flex; gap: 12px; justify-content: flex-start; align-items: center; flex-wrap: wrap;">
-            <button onclick="acceptCookies()" style="background: var(--gold); color: #111; border: none; padding: 12px 24px; font-weight: bold; font-size: 13px; cursor: pointer; transition: 0.3s; display: block; margin: 0 auto;">
+            <button onclick="acceptCookies()" style="background: var(--gold); color: #111; border: none; padding: 12px 24px; font-weight: bold; font-size: 13px; cursor: pointer; transition: 0.3s; display: block;">
                 Принять все куки
             </button>
-            <button onclick="closeBanner()" style="background: transparent; color: #ccc; border: 1px solid #555; padding: 10px 18px; font-size: 13px; cursor: pointer; transition: 0.3s; display: block; margin: 8px auto 0;">
+            <button onclick="rejectCookies()" style="background: transparent; color: #ccc; border: 1px solid #555; padding: 10px 18px; font-size: 13px; cursor: pointer; transition: 0.3s; display: block;">
+                Отклонить
+            </button>
+            <button onclick="closeBanner()" style="background: transparent; color: #ccc; border: 1px solid #555; padding: 10px 18px; font-size: 13px; cursor: pointer; transition: 0.3s; display: block;">
                 Закрыть
             </button>
         </div>
@@ -1932,13 +1924,13 @@ font-weight: 600;">
 </div>
 
 <script>
-// Проверка, было ли уже согласие
+// Проверка выбора пользователя (принял или отклонил)
 function hasCookieConsent() {
-    // Если ключа нет или он не равен 'true' — считаем, что согласия нет
-    return localStorage.getItem('cookieConsentAccepted') === 'true';
+    var status = localStorage.getItem('cookieConsent');
+    return status === 'accepted' || status === 'rejected';
 }
 
-// Показываем баннер, если согласия нет
+// Показываем баннер, если пользователь ещё не сделал выбор
 function showCookieBanner() {
     var banner = document.getElementById('cookie-banner');
     if (!hasCookieConsent()) {
@@ -1950,19 +1942,24 @@ function showCookieBanner() {
 
 // Принять все куки
 function acceptCookies() {
-    localStorage.setItem('cookieConsentAccepted', 'true');
+    localStorage.setItem('cookieConsent', 'accepted');
     document.getElementById('cookie-banner').style.display = 'none';
+    // Здесь можно включить аналитические скрипты, если есть
 }
 
-// Закрыть баннер без согласия (при этом согласие не сохраняется)
+// Отклонить куки
+function rejectCookies() {
+    localStorage.setItem('cookieConsent', 'rejected');
+    document.getElementById('cookie-banner').style.display = 'none';
+    // Здесь можно отключить аналитические скрипты, если есть
+}
+
+// Закрыть баннер без сохранения выбора (при следующем заходе он снова появится)
 function closeBanner() {
-    // Не записываем 'false', просто убираем баннер
-    // При следующей загрузке он снова появится, потому что ключа нет
-    localStorage.removeItem('cookieConsentAccepted');
     document.getElementById('cookie-banner').style.display = 'none';
 }
 
-// Запускаем баннер при загрузке страницы
+// Запускаем проверку при загрузке страницы
 window.addEventListener('DOMContentLoaded', function() {
     showCookieBanner();
 });
